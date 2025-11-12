@@ -14,5 +14,14 @@ app.get("/api/genres", (req, res) => {
   res.send(genres);
 });
 
+app.get("/api/genres/:id", (req, res) => {
+  const { id } = req.params;
+  const genre = genres.find((g) => g.id === parseInt(id));
+
+  return genre
+    ? res.send(genre)
+    : res.status(404).send("No genre with that ID");
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
