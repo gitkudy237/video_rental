@@ -42,5 +42,22 @@ app.post("/api/genres", (req, res) => {
   res.send(genre);
 });
 
+app.put("/api/genres/:id", (req, res) => {
+  const { id } = req.params;
+  const genre = genres.find((g) => g.id === parseInt(id));
+  if (!genre) return res.status(400).send("No genre with that ID");
+
+  const schema = {
+    name: Joi.string().min(3).required(),
+  };
+
+  const result = Joi.validate(req.body, schema);
+  if (result.error)
+    return res.status(400).send(`Error: ${result.error.details[0].message}`);
+
+  genre.name = req.body.name;
+  res.send(genre);
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
