@@ -10,5 +10,9 @@ const genres = [
   { id: 3, name: "Genre3" },
 ];
 
+app.get("/api/genres", (req, res) => {
+  res.send(genres);
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Listening on port ${port}`));
