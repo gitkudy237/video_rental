@@ -1,6 +1,12 @@
 const Joi = require("joi");
 const express = require("express");
 const router = express.Router();
+const mongoose = require("mongoose");
+
+mongoose
+  .connect("mongodb://localhost/movies")
+  .then(() => console.log("Connected to mongoDB"))
+  .catch((err) => console.error("Could not connect to mongoDB: ", err.message));
 
 const genres = [
   { id: 1, name: "Genre1" },
