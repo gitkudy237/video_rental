@@ -16,6 +16,9 @@ const genreSchema = mongoose.Schema({
     maxLength: 55,
   },
 });
+
+const Genre = mongoose.model("Genre", genreSchema);
+
 const genres = [
   { id: 1, name: "Genre1" },
   { id: 2, name: "Genre2" },
