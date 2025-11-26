@@ -19,60 +19,61 @@ const genreSchema = mongoose.Schema({
 
 const Genre = mongoose.model("Genre", genreSchema);
 
-const genres = [
-  { id: 1, name: "Genre1" },
-  { id: 2, name: "Genre2" },
-  { id: 3, name: "Genre3" },
-];
+// const genres = [
+//   { id: 1, name: "Genre1" },
+//   { id: 2, name: "Genre2" },
+//   { id: 3, name: "Genre3" },
+// ];
 
-router.get("/", (req, res) => {
-  res.send(genres);
+router.get("/", async (req, res) => {
+  const result = await Genre.find().sort({ name: 1 });
+  res.send(result);
 });
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  const genre = genres.find((g) => g.id === parseInt(id));
+// router.get("/:id", (req, res) => {
+//   const { id } = req.params;
+//   const genre = genres.find((g) => g.id === parseInt(id));
 
-  return genre
-    ? res.send(genre)
-    : res.status(404).send("No genre with that ID");
-});
+//   return genre
+//     ? res.send(genre)
+//     : res.status(404).send("No genre with that ID");
+// });
 
-router.post("/", (req, res) => {
-  const { error } = validateGenre(req.body);
-  if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
+// router.post("/", (req, res) => {
+//   const { error } = validateGenre(req.body);
+//   if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
 
-  const genre = {
-    id: genres.length + 1,
-    name: req.body.name,
-  };
+//   const genre = {
+//     id: genres.length + 1,
+//     name: req.body.name,
+//   };
 
-  genres.push(genre);
-  res.send(genre);
-});
+//   genres.push(genre);
+//   res.send(genre);
+// });
 
-router.put("/:id", (req, res) => {
-  const { id } = req.params;
-  const genre = genres.find((g) => g.id === parseInt(id));
-  if (!genre) return res.status(400).send("No genre with that ID");
+// router.put("/:id", (req, res) => {
+//   const { id } = req.params;
+//   const genre = genres.find((g) => g.id === parseInt(id));
+//   if (!genre) return res.status(400).send("No genre with that ID");
 
-  const { error } = validateGenre(req.body);
-  if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
+//   const { error } = validateGenre(req.body);
+//   if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
 
-  genre.name = req.body.name;
-  res.send(genre);
-});
+//   genre.name = req.body.name;
+//   res.send(genre);
+// });
 
-router.delete("/:id", (req, res) => {
-  const { id } = req.params;
-  const genre = genres.find((g) => g.id === parseInt(id));
-  if (!genre) return res.status(400).send("No genre with that ID");
+// router.delete("/:id", (req, res) => {
+//   const { id } = req.params;
+//   const genre = genres.find((g) => g.id === parseInt(id));
+//   if (!genre) return res.status(400).send("No genre with that ID");
 
-  const index = genres.indexOf(genre);
-  genres.splice(index, 1);
+//   const index = genres.indexOf(genre);
+//   genres.splice(index, 1);
 
-  res.send(genre);
-});
+//   res.send(genre);
+// });
 
 function validateGenre(genre) {
   const schema = {
