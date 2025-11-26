@@ -12,8 +12,9 @@ const genreSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minLength: 5,
+    minLength: 3,
     maxLength: 55,
+    trim: true,
   },
 });
 
@@ -39,18 +40,19 @@ router.get("/", async (req, res) => {
 //     : res.status(404).send("No genre with that ID");
 // });
 
-// router.post("/", (req, res) => {
-//   const { error } = validateGenre(req.body);
-//   if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
+router.post("/", async (req, res) => {
+  const { error } = validateGenre(req.body);
+  if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
 
-//   const genre = {
-//     id: genres.length + 1,
-//     name: req.body.name,
-//   };
+  const genre = new Genre({ ...req.body });
 
-//   genres.push(genre);
-//   res.send(genre);
-// });
+  try {
+    const result = await genre.save();
+    res.send(result);
+  } catch (error) {
+    console.log("Error: ", error.message);
+  }
+});
 
 // router.put("/:id", (req, res) => {
 //   const { id } = req.params;
