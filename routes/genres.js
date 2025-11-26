@@ -31,14 +31,15 @@ router.get("/", async (req, res) => {
   res.send(result);
 });
 
-// router.get("/:id", (req, res) => {
-//   const { id } = req.params;
-//   const genre = genres.find((g) => g.id === parseInt(id));
-
-//   return genre
-//     ? res.send(genre)
-//     : res.status(404).send("No genre with that ID");
-// });
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const genre = await Genre.findById({ _id: id });
+    return res.send(genre);
+  } catch (error) {
+    res.status(404).send("No genre with that ID");
+  }
+});
 
 router.post("/", async (req, res) => {
   const { error } = validateGenre(req.body);
