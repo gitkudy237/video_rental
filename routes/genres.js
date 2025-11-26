@@ -8,6 +8,14 @@ mongoose
   .then(() => console.log("Connected to mongoDB"))
   .catch((err) => console.error("Could not connect to mongoDB: ", err.message));
 
+const genreSchema = mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minLength: 5,
+    maxLength: 55,
+  },
+});
 const genres = [
   { id: 1, name: "Genre1" },
   { id: 2, name: "Genre2" },
