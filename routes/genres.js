@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 
 const Genre = mongoose.model(
   "Genre",
-  new mongoose.Schema({
+  mongoose.Schema({
     name: {
       type: String,
       required: true,
@@ -16,12 +16,6 @@ const Genre = mongoose.model(
   })
 );
 
-// const genres = [
-//   { id: 1, name: "Genre1" },
-//   { id: 2, name: "Genre2" },
-//   { id: 3, name: "Genre3" },
-// ];
-
 router.get("/", async (req, res) => {
   const result = await Genre.find().sort({ name: 1 });
   res.send(result);
@@ -31,9 +25,11 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const genre = await Genre.findById({ _id: id });
-    return res.send(genre);
+    return genre
+      ? res.status(200).send(genre)
+      : res.status(404).send("Genre not found");
   } catch (error) {
-    res.status(404).send("No genre with that ID");
+    console.error(error.message);
   }
 });
 
@@ -62,16 +58,13 @@ router.put("/:id", async (req, res) => {
   res.send(genre);
 });
 
-// router.delete("/:id", (req, res) => {
-//   const { id } = req.params;
-//   const genre = genres.find((g) => g.id === parseInt(id));
-//   if (!genre) return res.status(400).send("No genre with that ID");
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  const genre = await Genre.findByIdAndDelete(id);
+  if (!genre) return res.status(404).send("No genre with that ID");
 
-//   const index = genres.indexOf(genre);
-//   genres.splice(index, 1);
-
-//   res.send(genre);
-// });
+  res.send(genre);
+});
 
 function validateGenre(genre) {
   const schema = {
