@@ -3,22 +3,18 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 
-mongoose
-  .connect("mongodb://localhost/movies")
-  .then(() => console.log("Connected to mongoDB"))
-  .catch((err) => console.error("Could not connect to mongoDB: ", err.message));
-
-const genreSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minLength: 3,
-    maxLength: 55,
-    trim: true,
-  },
-});
-
-const Genre = mongoose.model("Genre", genreSchema);
+const Genre = mongoose.model(
+  "Genre",
+  new mongoose.Schema({
+    name: {
+      type: String,
+      required: true,
+      minLength: 3,
+      maxLength: 55,
+      trim: true,
+    },
+  })
+);
 
 // const genres = [
 //   { id: 1, name: "Genre1" },
@@ -55,17 +51,16 @@ router.post("/", async (req, res) => {
   }
 });
 
-// router.put("/:id", (req, res) => {
-//   const { id } = req.params;
-//   const genre = genres.find((g) => g.id === parseInt(id));
-//   if (!genre) return res.status(400).send("No genre with that ID");
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const { error } = validateGenre(req.body);
+  if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
 
-//   const { error } = validateGenre(req.body);
-//   if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
+  const genre = await Genre.findByIdAndUpdate(id, req.body, { new: true });
+  if (!genre) return res.status(404).send("No genre with that ID");
 
-//   genre.name = req.body.name;
-//   res.send(genre);
-// });
+  res.send(genre);
+});
 
 // router.delete("/:id", (req, res) => {
 //   const { id } = req.params;

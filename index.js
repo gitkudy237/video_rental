@@ -1,6 +1,12 @@
 require("dotenv").config();
 const genres = require("./routes/genres");
 const express = require("express");
+const mongoose = require("mongoose");
+
+mongoose
+  .connect("mongodb://localhost/vidly")
+  .then(() => console.log("Connected to mongoDB"))
+  .catch((err) => console.error("Could not connect to mongoDB: ", err.message));
 
 const app = express();
 app.use(express.json());
