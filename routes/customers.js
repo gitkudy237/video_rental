@@ -7,9 +7,22 @@ const router = Router();
 const Customer = mongoose.model(
   "Customer",
   mongoose.Schema({
-    name: String,
-    phone: String,
-    isGold: Boolean,
+    name: {
+      type: String,
+      required: true,
+      minLength: 5,
+      maxLength: 50,
+    },
+    phone: {
+      type: String,
+      required: true,
+      minLength: 5,
+      maxLength: 15,
+    },
+    isGold: {
+      type: Boolean,
+      default: false,
+    },
   })
 );
 
@@ -66,9 +79,9 @@ router.delete("/:id", async (req, res) => {
 
 function validateCustomer(genre) {
   const schema = {
-    name: Joi.string().min(3).required(),
-    phone: Joi.string().min(5).required(),
-    isGold: Joi.boolean().required(),
+    name: Joi.string().min(5).max(50).required(),
+    phone: Joi.string().min(5).max(50).required(),
+    isGold: Joi.boolean(),
   };
 
   return Joi.validate(genre, schema);
