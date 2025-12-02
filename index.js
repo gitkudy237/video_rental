@@ -1,6 +1,6 @@
 require("dotenv").config();
 const genres = require("./routes/genres");
-const customers = require("./routes/customer");
+const customers = require("./routes/customers");
 const express = require("express");
 const mongoose = require("mongoose");
 
