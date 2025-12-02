@@ -1,30 +1,7 @@
-const Joi = require("joi");
-const mongoose = require("mongoose");
+const { Customer, Validate } = require("../models/customer");
 const { Router } = require("express");
 
 const router = Router();
-
-const Customer = mongoose.model(
-  "Customer",
-  mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      minLength: 5,
-      maxLength: 50,
-    },
-    phone: {
-      type: String,
-      required: true,
-      minLength: 5,
-      maxLength: 15,
-    },
-    isGold: {
-      type: Boolean,
-      default: false,
-    },
-  })
-);
 
 router.get("/", async (req, res) => {
   const customers = await Customer.find().sort({ name: 1 });
@@ -44,7 +21,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { error } = validateCustomer(req.body);
+  const { error } = Validate(req.body);
   if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
 
   const customer = new Customer(req.body);
@@ -58,7 +35,7 @@ router.post("/", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
-  const { error } = validateCustomer(req.body);
+  const { error } = Validate(req.body);
   if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
 
   const customer = await Customer.findByIdAndUpdate(id, req.body, {
@@ -76,15 +53,5 @@ router.delete("/:id", async (req, res) => {
 
   res.send(customer);
 });
-
-function validateCustomer(genre) {
-  const schema = {
-    name: Joi.string().min(5).max(50).required(),
-    phone: Joi.string().min(5).max(50).required(),
-    isGold: Joi.boolean(),
-  };
-
-  return Joi.validate(genre, schema);
-}
 
 module.exports = router;
