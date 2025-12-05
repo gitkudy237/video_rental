@@ -26,3 +26,5 @@ const Movie = mongoose.model(
     },
   })
 );
+
+exports.Movie = Movie;
