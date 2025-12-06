@@ -32,3 +32,6 @@ function validateRentalrental(rental) {
 
   return Joi.validate(rental, schema);
 }
+
+exports.Rental = Rental;
+exports.Validate = validateRentalrental;
