@@ -1,6 +1,7 @@
 const { Customer } = require("../models/customer");
 const { Movie } = require("../models/movie");
-const { Rental } = require("../models/rental");
+const mongoose = require("mongoose");
+const { Rental, Validate } = require("../models/rental");
 const { Router } = require("express");
 
 const router = Router();
@@ -18,12 +19,15 @@ router.post("/", async (req, res) => {
 
   const customer = await Customer.findById(customerId);
   if (!customer) return res.status(400).send("Invalid customer");
+  console.log(customer);
 
   const movie = await Movie.findById(movieId);
   if (!movie) return res.status(400).send("Invalid movie");
+  console.log(movie);
 
-  if (movie.numberInStock === 0)
+  if (movie.mumberInStock === 0)
     return res.status(400).send("Movie not in stock");
+  console.log(movie.mumberInStock);
 
   const rental = new Rental({
     customer: {
@@ -32,17 +36,20 @@ router.post("/", async (req, res) => {
       phone: customer.phone,
     },
     movie: {
-      _id: movie._d,
+      _id: movie._id,
       title: movie.title,
       dailyRate: movie.dailyRate,
     },
   });
-  const result = await rental.save();
 
-  movie.numberInStock--;
-  movie.save();
+  try {
+    await rental.save();
+    await Movie.updateOne({ _id: movie._id }, { $inc: { mumberInStock: -1 } });
 
-  res.status(201).send(result);
+    res.status(201).send(rental);
+  } catch (error) {
+    res.status(500).send(`Something failed: ${error}`);
+  }
 });
 
 module.exports = router;
