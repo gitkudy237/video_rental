@@ -36,8 +36,8 @@ router.post("/", async (req, res) => {
     numberInStock: numberInStock,
     dailyRate: dailyRate,
   });
-  const result = await movie.save();
-  res.status(201).send(result);
+  await movie.save();
+  res.status(201).send(movie);
 });
 
 router.put("/:id", async (req, res) => {

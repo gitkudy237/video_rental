@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const { customerSchema } = require("./customer");
 const { movieSchema } = require("./movie");
 const Joi = require("joi");
-Joi.objectId = require("joi-objectid")(Joi);
 
 const Rental = mongoose.model(
   "Rental",
