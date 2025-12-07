@@ -12,6 +12,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "joi": "^13.1.0",
+    "joi-objectid": "^4.0.2",
     "mongoose": "^9.0.0",
     "mongoose-transaction": "^0.0.3"
   }
