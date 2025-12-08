@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema({
     maxLength: 55,
   },
   password: {
+    // TODO: Install joi-password-complexity to enforce password validation
     type: String,
     required: true,
     minLength: 8,
