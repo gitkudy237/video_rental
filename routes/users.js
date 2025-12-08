@@ -7,7 +7,10 @@ router.post("/", async (req, res) => {
   const { error } = Validate(req.body);
   if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
 
-  const user = new User(req.body);
+  let user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(400).send("User already registered.");
+
+  user = new User(req.body);
   await user.save();
 
   res.status(201).send({ name: user.name, email: user.email });
