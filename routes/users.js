@@ -1,3 +1,5 @@
+const config = require("config");
+const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const { User, Validate } = require("../models/user");
@@ -9,6 +11,8 @@ router.post("/", async (req, res) => {
   const { error } = Validate(req.body);
   if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
 
+  const email = req.body.email;
+  console.log(email);
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("User already registered.");
 
@@ -17,9 +21,10 @@ router.post("/", async (req, res) => {
   user.password = await bcrypt.hash(user.password, salt);
   await user.save();
 
+  const token = jwt.sign({ _id: user._id }, config.get("jwtPrivateKey"));
   const result = _.pick(user, ["_id", "name", "email"]);
 
-  res.status(201).send(result);
+  res.header("x-auth-token", token).status(201).send(result);
 });
 
 module.exports = router;
