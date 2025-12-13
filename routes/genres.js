@@ -1,3 +1,4 @@
+const auth = require("../middleware/auth");
 const { Genre, Validate } = require("../models/genre");
 const { Router } = require("express");
 
@@ -20,7 +21,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   const { error } = Validate(req.body);
   if (error) return res.status(400).send(`Error: ${error.details[0].message}`);
 

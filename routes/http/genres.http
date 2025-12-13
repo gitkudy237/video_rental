@@ -1,0 +1,9 @@
+POST http://localhost:3500/api/genres
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2OTM3NTYzMzQzNDMzYjc4MjZjODk4ODAiLCJpYXQiOjE3NjU2NjcyNDB9.VDfcF0lAUWrcytWr8QKPyLH9kvBKoKe7b271WLQiT2Y
+
+Content-Type: : : application/json
+
+{
+    "name": "New Genre"
+}
+
