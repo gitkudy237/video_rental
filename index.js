@@ -15,11 +15,13 @@ const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
 
-process.on("uncaughtException", (ex) => {
-  console.log("WE GOT AN UNCAUGHT EXCEPTION");
-  winston.error(ex.message, ex);
-  process.exit(1);
-});
+winston.add(
+  new winston.transports.File({
+    filename: "uncaught-exceptions.log",
+    handleExceptions: true,
+    handleRejections: true,
+  })
+);
 
 winston.add(new winston.transports.File({ filename: "logfile.log" }));
 winston.add(
