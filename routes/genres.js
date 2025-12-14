@@ -6,7 +6,6 @@ const { Router } = require("express");
 const router = Router();
 
 router.get("/", async (req, res) => {
-  throw new Error("Could not get the genres.");
   const result = await Genre.find().sort({ name: 1 });
   res.send(result);
 });
