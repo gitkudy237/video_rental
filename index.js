@@ -13,11 +13,21 @@ const users = require("./routes/users");
 const auth = require("./routes/auth");
 const mongoose = require("mongoose");
 const express = require("express");
+const app = express();
+
+process.on("uncaughtException", (ex) => {
+  console.log("WE GOT AN UNCAUGHT EXCEPTION");
+  winston.error(ex.message, ex);
+  process.exit(1);
+});
 
 winston.add(new winston.transports.File({ filename: "logfile.log" }));
 winston.add(
   new winston.transports.MongoDB({ db: "mongodb://localhost/vidly" })
 );
+
+const p = Promise.reject(new Error("Something failed miserably"));
+p.then(() => console.log("Something should happen"));
 
 if (!config.get("jwtPrivateKey")) {
   console.error("FATAL ERROR: jwtPrivateKey is not defined.");
@@ -29,7 +39,6 @@ mongoose
   .then(() => console.log("Connected to mongoDB"))
   .catch((err) => console.error("Could not connect to mongoDB: ", err.message));
 
-const app = express();
 app.use(express.json());
 
 app.use("/api/genres", genres);
