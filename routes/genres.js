@@ -5,13 +5,12 @@ const { Router } = require("express");
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async (req, res, next) => {
   try {
     const result = await Genre.find().sort({ name: 1 });
     res.send(result);
   } catch (ex) {
-    // Log the exception
-    res.status(500).send("Something failed");
+    next(ex);
   }
 });
 
