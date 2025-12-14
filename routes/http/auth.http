@@ -1,7 +1,0 @@
-POST   http://localhost:3500/api/auth
-Content-Type: application/json
-
-{
-    "email": "kudy@mail.com",
-    "password": "password"
-}
